@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAuth } from "@/hooks/use-auth";
-import { Package, Truck, Building2, Users, BarChart3, Settings, LogOut } from "lucide-react";
+import { Package, Truck, Building2, Users, BarChart3, Settings, LogOut, Bell } from "lucide-react";
 import { useLocation } from "wouter";
 
 const sidebarItems = [
@@ -23,7 +23,7 @@ export function Sidebar() {
       <div className="p-6">
         <h2 className="text-lg font-semibold text-sidebar-foreground">LogiTrack</h2>
       </div>
-      
+
       <ScrollArea className="flex-1 px-3">
         <nav className="flex flex-col gap-2">
           {sidebarItems.map((item) => {
@@ -50,6 +50,12 @@ export function Sidebar() {
         <div className="flex items-center gap-3 mb-6">
           <div className="flex-1">
             <p className="text-sm font-medium text-sidebar-foreground">{user?.username}</p>
+          </div>
+          <div className="relative">
+            <Bell className="h-5 w-5 text-muted-foreground" />
+            <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-destructive text-[10px] font-medium text-destructive-foreground flex items-center justify-center">
+              3
+            </span>
           </div>
         </div>
         <Button
