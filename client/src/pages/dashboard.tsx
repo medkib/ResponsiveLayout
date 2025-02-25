@@ -3,10 +3,30 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ShipmentTable } from "@/components/dashboard/shipment-table";
 import { TrackingMap } from "@/components/dashboard/tracking-map";
 import { Button } from "@/components/ui/button";
-import { Package, Clock, DollarSign, Receipt, Plus, Bell } from "lucide-react";
+import { Package, Clock, DollarSign, Receipt, Plus, Bell, Search } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { Shipment } from "@shared/schema";
 import { useAuth } from "@/hooks/use-auth";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
+const timePeriods = [
+  { label: "1D", value: "1d" },
+  { label: "7D", value: "7d" },
+  { label: "2W", value: "2w" },
+  { label: "M1", value: "1m" },
+  { label: "3M", value: "3m" },
+  { label: "6M", value: "6m" },
+  { label: "MTD", value: "mtd" },
+  { label: "YTD", value: "ytd" },
+  { label: "Custom", value: "custom" },
+];
+
+const modes = [
+  { label: "All Modes", value: "all" },
+  { label: "FTL", value: "ftl" },
+  { label: "LTL", value: "ltl" },
+];
 
 function DashboardCard({ 
   title, 
@@ -96,6 +116,52 @@ export default function Dashboard() {
               <Plus className="h-4 w-4 mr-2" />
               Create Shipment
             </Button>
+          </div>
+
+          <div className="bg-card border rounded-lg p-4">
+            <div className="flex flex-col gap-4">
+              <div className="inline-flex rounded-md shadow-sm">
+                {timePeriods.map((period) => (
+                  <Button
+                    key={period.value}
+                    variant={period.value === "1d" ? "default" : "outline"}
+                    className="first:rounded-l-md last:rounded-r-md rounded-none border-r-0 last:border-r"
+                  >
+                    {period.label}
+                  </Button>
+                ))}
+              </div>
+
+              <div className="flex gap-4 items-center">
+                <div className="flex-1">
+                  <Input placeholder="Shipment ID" className="w-full" />
+                </div>
+                <div className="flex-1">
+                  <Input placeholder="Origin" className="w-full" />
+                </div>
+                <div className="flex-1">
+                  <Input placeholder="Destination" className="w-full" />
+                </div>
+                <div className="flex-1">
+                  <Select defaultValue="all">
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Mode" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {modes.map((mode) => (
+                        <SelectItem key={mode.value} value={mode.value}>
+                          {mode.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button variant="outline">
+                  <Search className="h-4 w-4 mr-2" />
+                  Search
+                </Button>
+              </div>
+            </div>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
