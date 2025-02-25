@@ -28,15 +28,15 @@ const modes = [
   { label: "LTL", value: "ltl" },
 ];
 
-function DashboardCard({ 
-  title, 
-  value, 
-  description, 
-  icon: Icon 
-}: { 
-  title: string; 
-  value: string; 
-  description: string; 
+function DashboardCard({
+  title,
+  value,
+  description,
+  icon: Icon
+}: {
+  title: string;
+  value: string;
+  description: string;
   icon: any;
 }) {
   return (
@@ -88,7 +88,7 @@ export default function Dashboard() {
 
   const activeShipments = shipments?.filter(s => s.status === "In Transit").length || 0;
   const deliveredShipments = shipments?.filter(s => s.status === "Delivered").length || 0;
-  const onTimeDelivery = shipments?.length ? 
+  const onTimeDelivery = shipments?.length ?
     Math.round((deliveredShipments / shipments.length) * 100) : 0;
 
   return (
@@ -96,6 +96,7 @@ export default function Dashboard() {
       <Sidebar />
       <main className="flex-1 overflow-auto p-8">
         <div className="max-w-7xl mx-auto space-y-8">
+          {/* Header */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-8">
               <h1 className="text-3xl font-bold">Dashboard</h1>
@@ -118,52 +119,54 @@ export default function Dashboard() {
             </Button>
           </div>
 
-          <div className="bg-card border rounded-lg p-4">
-            <div className="flex flex-col gap-4">
-              <div className="inline-flex rounded-md shadow-sm">
-                {timePeriods.map((period) => (
-                  <Button
-                    key={period.value}
-                    variant={period.value === "1d" ? "default" : "outline"}
-                    className="first:rounded-l-md last:rounded-r-md rounded-none border-r-0 last:border-r"
-                  >
-                    {period.label}
-                  </Button>
-                ))}
-              </div>
+          {/* Live Tracking Map */}
+          <TrackingMap shipments={shipments || []} isLoading={isLoading} />
 
-              <div className="flex gap-4 items-center">
-                <div className="flex-1">
-                  <Input placeholder="Shipment ID" className="w-full" />
-                </div>
-                <div className="flex-1">
-                  <Input placeholder="Origin" className="w-full" />
-                </div>
-                <div className="flex-1">
-                  <Input placeholder="Destination" className="w-full" />
-                </div>
-                <div className="flex-1">
-                  <Select defaultValue="all">
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Mode" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {modes.map((mode) => (
-                        <SelectItem key={mode.value} value={mode.value}>
-                          {mode.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <Button variant="outline">
-                  <Search className="h-4 w-4 mr-2" />
-                  Search
-                </Button>
-              </div>
-            </div>
+          {/* Time Period Buttons */}
+          <div className="inline-flex rounded-md shadow-sm">
+            {timePeriods.map((period) => (
+              <Button
+                key={period.value}
+                variant={period.value === "1d" ? "default" : "outline"}
+                className="first:rounded-l-md last:rounded-r-md rounded-none border-r-0 last:border-r"
+              >
+                {period.label}
+              </Button>
+            ))}
           </div>
 
+          {/* Filter Controls */}
+          <div className="flex gap-4 items-center bg-card border rounded-lg p-4">
+            <div className="flex-1">
+              <Input placeholder="Shipment ID" className="w-full" />
+            </div>
+            <div className="flex-1">
+              <Input placeholder="Origin" className="w-full" />
+            </div>
+            <div className="flex-1">
+              <Input placeholder="Destination" className="w-full" />
+            </div>
+            <div className="flex-1">
+              <Select defaultValue="all">
+                <SelectTrigger>
+                  <SelectValue placeholder="Select Mode" />
+                </SelectTrigger>
+                <SelectContent>
+                  {modes.map((mode) => (
+                    <SelectItem key={mode.value} value={mode.value}>
+                      {mode.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <Button variant="outline">
+              <Search className="h-4 w-4 mr-2" />
+              Search
+            </Button>
+          </div>
+
+          {/* Dashboard Cards */}
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <DashboardCard
               title="Active Shipments"
@@ -191,12 +194,11 @@ export default function Dashboard() {
             />
           </div>
 
+          {/* Notification Card and Shipment Table */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <TrackingMap shipments={shipments || []} isLoading={isLoading} />
             <NotificationCard />
+            <ShipmentTable shipments={shipments || []} isLoading={isLoading} />
           </div>
-
-          <ShipmentTable shipments={shipments || []} isLoading={isLoading} />
         </div>
       </main>
     </div>
