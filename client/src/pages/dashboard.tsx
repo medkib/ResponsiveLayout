@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Package, Clock, DollarSign, Receipt, Plus, Bell } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { Shipment } from "@shared/schema";
+import { useAuth } from "@/hooks/use-auth";
 
 function DashboardCard({ 
   title, 
@@ -63,6 +64,7 @@ export default function Dashboard() {
   const { data: shipments, isLoading } = useQuery<Shipment[]>({
     queryKey: ["/api/shipments"],
   });
+  const { user } = useAuth();
 
   const activeShipments = shipments?.filter(s => s.status === "In Transit").length || 0;
   const deliveredShipments = shipments?.filter(s => s.status === "Delivered").length || 0;
@@ -75,7 +77,21 @@ export default function Dashboard() {
       <main className="flex-1 overflow-auto p-8">
         <div className="max-w-7xl mx-auto space-y-8">
           <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold">Dashboard</h1>
+            <div className="flex items-center gap-8">
+              <h1 className="text-3xl font-bold">Dashboard</h1>
+              <div className="flex items-center gap-4">
+                <div className="relative">
+                  <Bell className="h-6 w-6 text-muted-foreground cursor-pointer hover:text-foreground transition-colors" />
+                  <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-destructive text-[10px] font-medium text-destructive-foreground flex items-center justify-center">
+                    3
+                  </span>
+                </div>
+                <div className="h-8 w-[1px] bg-border"></div>
+                <div className="text-sm font-medium">
+                  Welcome, {user?.username}
+                </div>
+              </div>
+            </div>
             <Button>
               <Plus className="h-4 w-4 mr-2" />
               Create Shipment
