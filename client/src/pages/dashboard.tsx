@@ -2,9 +2,8 @@ import { Sidebar } from "@/components/layout/sidebar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ShipmentTable } from "@/components/dashboard/shipment-table";
 import { TrackingMap } from "@/components/dashboard/tracking-map";
-import { Analytics } from "@/components/dashboard/analytics";
 import { Button } from "@/components/ui/button";
-import { Package, Clock, DollarSign, Receipt, Plus } from "lucide-react";
+import { Package, Clock, DollarSign, Receipt, Plus, Bell } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { Shipment } from "@shared/schema";
 
@@ -28,6 +27,33 @@ function DashboardCard({
       <CardContent>
         <div className="text-2xl font-bold">{value}</div>
         <p className="text-xs text-muted-foreground">{description}</p>
+      </CardContent>
+    </Card>
+  );
+}
+
+function NotificationCard() {
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-lg font-semibold">Recent Notifications</CardTitle>
+        <Bell className="h-4 w-4 text-muted-foreground" />
+      </CardHeader>
+      <CardContent>
+        <ul className="space-y-4">
+          <li className="flex items-center gap-3 pb-4 border-b">
+            <span className="h-2 w-2 rounded-full bg-destructive"></span>
+            <p className="text-sm">Shipment #SH-2023-002 is experiencing delays due to weather conditions.</p>
+          </li>
+          <li className="flex items-center gap-3 pb-4 border-b">
+            <span className="h-2 w-2 rounded-full bg-warning"></span>
+            <p className="text-sm">Invoice #INV-456 is due in 3 days. Please process payment.</p>
+          </li>
+          <li className="flex items-center gap-3">
+            <span className="h-2 w-2 rounded-full bg-primary"></span>
+            <p className="text-sm">Shipment #SH-2023-003 has been successfully delivered.</p>
+          </li>
+        </ul>
       </CardContent>
     </Card>
   );
@@ -85,7 +111,7 @@ export default function Dashboard() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <TrackingMap shipments={shipments || []} isLoading={isLoading} />
-            <Analytics shipments={shipments || []} isLoading={isLoading} />
+            <NotificationCard />
           </div>
 
           <ShipmentTable shipments={shipments || []} isLoading={isLoading} />
